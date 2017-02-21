@@ -1,0 +1,27 @@
+{
+    "name": "developeruz/yii-kit-core",
+    "description": "Core Admin Component For Yii-kit CMS",
+    "keywords": ["yii", "CMS"],
+    "type": "yii2-extension",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Elvira Sheina",
+            "email": "elvira@toptal.com",
+            "homepage": "http://developer.uz"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "dmstr/yii2-adminlte-asset": "2.*"
+    },
+    "support": {
+        "issues": "https://github.com/developeruz/yii-kit-core/issues",
+        "source": "https://github.com/developeruz/yii-kit-core"
+    },
+    "autoload": {
+        "psr-4": {
+            "developeruz\\yii_kit_core\\": ""
+        }
+    }
+}
