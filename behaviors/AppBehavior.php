@@ -48,5 +48,4 @@ class AppBehavior extends Behavior
         ]);
         */
     }
-
 }
