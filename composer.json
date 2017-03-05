@@ -13,7 +13,8 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "dmstr/yii2-adminlte-asset": "2.*"
+        "dmstr/yii2-adminlte-asset": "2.*",
+        "developeruz/yii2-db-rbac": "*"
     },
     "support": {
         "issues": "https://github.com/developeruz/yii-kit-core/issues",

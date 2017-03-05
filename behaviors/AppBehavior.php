@@ -27,32 +27,35 @@ class AppBehavior extends Behavior
 
     public function settings()
     {
-        \Yii::$app->setModule('admin', [
-            'class' => 'developeruz\yii_kit_core\Module',
-        ]);
+        if (\Yii::$app->db->schema->getTableSchema('config') !== null ) {
 
-        \Yii::$app->urlManager->addRules([
-            'admin' => 'admin/admin/index',
-            'admin/index' => 'admin/admin/index',
-        ]);
+            \Yii::$app->setModule('admin', [
+                'class' => 'developeruz\yii_kit_core\Module',
+            ]);
 
-        $theme = $this->configService->getActiveTheme();
-        if ($theme != 'default') {
-            \Yii::$app->view->theme = new Theme(
-                [
-                    'pathMap' => [
-                        '@app/views' => '@app/themes/' . $theme,
-                        '@vendor/developeruz/yii-kit-core/views' => '@app/themes/' . $theme . '/modules/admin'
+            \Yii::$app->urlManager->addRules([
+                'admin' => 'admin/admin/index'
+            ]);
+
+            $theme = $this->configService->getActiveTheme();
+            if ($theme != 'default') {
+                \Yii::$app->view->theme = new Theme(
+                    [
+                        'pathMap' => [
+                            '@app/views' => '@app/themes/' . $theme,
+                            '@vendor/developeruz/yii-kit-core/views' => '@app/themes/' . $theme . '/modules/admin'
+                        ]
                     ]
-                ]
-            );
-        }
+                );
+                //todo: переопределение view для сторонних модулей
+            }
 
-        \Yii::$app->view->on(View::EVENT_BEFORE_RENDER, function ($event) {
-            \Yii::$app->getView()->registerAssetBundle(YiiKitAsset::className());
-            \Yii::setAlias('@yii_kit_theme',
-                \Yii::$app->view->assetBundles['developeruz\yii_kit_core\assets\YiiKitAsset']->baseUrl);
-        });
+            \Yii::$app->view->on(View::EVENT_BEFORE_RENDER, function ($event) {
+                \Yii::$app->getView()->registerAssetBundle(YiiKitAsset::className());
+                \Yii::setAlias('@yii_kit_theme',
+                    \Yii::$app->view->assetBundles['developeruz\yii_kit_core\assets\YiiKitAsset']->baseUrl);
+            });
+        }
 
         /*
         //установка языка

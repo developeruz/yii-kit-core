@@ -18,7 +18,7 @@ class m170226_100451_create_config_table extends Migration
             'value' => \yii\db\Schema::TYPE_STRING
         ]);
 
-        $this->insert('config', ['params' => 'theme', 'value' => 'default']);
+        $this->insert('config', ['param' => 'theme', 'value' => 'default']);
     }
 
     /**
