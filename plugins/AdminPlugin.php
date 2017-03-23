@@ -7,11 +7,22 @@ class AdminPlugin extends Plugin
 {
     public function init()
     {
-        $userMenu = \Yii::$app->view->renderFile('@vendor/developeruz/yii-kit-core/views/_partials/user_dropdown_menu.php');
-        $this->addNotificationMenuItem('notifications-menu', '<img src="/img/user2-160x160.jpg" class="user-image" alt="User Image"/>
-                        <span class="hidden-xs">Alexander Pierce</span>',$userMenu);
+        if(!\Yii::$app->user->isGuest) {
+            $userMenu = \Yii::$app->view->renderFile('@vendor/developeruz/yii-kit-core/views/_partials/user_dropdown_menu.php');
+            $this->addNotificationMenuItem('notifications-menu',
+                '<span class="hidden-xs">' . \Yii::$app->user->identity->getUserName() . '</span>', $userMenu);
 
-        $this->addLeftMenuItem(['label' => 'Settings', 'icon' => 'fa fa-cog', 'url' => ['/admin/settings']]);
-        $this->addLeftMenuItem(['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug']]);
+            $this->addLeftMenuItem(['label' => 'Settings', 'icon' => 'fa fa-cog', 'url' => ['/admin/settings']]);
+            $this->addLeftMenuItem([
+                'label' => 'Users',
+                'icon' => 'fa fa-users',
+                'url' => '#',
+                'items' => [
+                    ['label' => 'Users', 'icon' => 'fa fa-users', 'url' => ['/user/admin/index'],],
+                    ['label' => 'Roles', 'icon' => 'fa fa-user-secret', 'url' => ['/permit/access/role'],],
+                    ['label' => 'Permissions', 'icon' => 'fa fa-unlock-alt', 'url' => ['/permit/access/permission'],],
+                ]
+            ]);
+        };
     }
 }

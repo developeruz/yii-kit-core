@@ -1,9 +1,12 @@
 <?php
 namespace developeruz\yii_kit_core\behaviors;
 
+use app\components\Plugin;
 use developeruz\yii_kit_core\assets\YiiKitAsset;
+use developeruz\yii_kit_core\plugins\AdminPlugin;
 use developeruz\yii_kit_core\services\ConfigService;
 use yii\base\Behavior;
+use yii\base\Module;
 use yii\base\Theme;
 use yii\web\Application;
 use yii\web\View;
@@ -22,6 +25,7 @@ class AppBehavior extends Behavior
     {
         return [
             Application::EVENT_BEFORE_REQUEST => 'settings',
+            Module::EVENT_BEFORE_ACTION => 'init_plugins'
         ];
     }
 
@@ -29,9 +33,16 @@ class AppBehavior extends Behavior
     {
         if (\Yii::$app->db->schema->getTableSchema('config') !== null ) {
 
-            \Yii::$app->setModule('admin', [
-                'class' => 'developeruz\yii_kit_core\Module',
-            ]);
+            $this->setModules();
+
+//            \Yii::$app->attachBehavior('AccessBehavior', [
+//                'class' => \developeruz\db_rbac\behaviors\AccessBehavior::className(),
+//                'login_url' => '/user/security/login',
+//                'protect' => ['admin']
+//            ]);
+
+            //todo: custom event для плагинов, чтобы можно было добавлять protected директории
+//            \Yii::$app->behaviors['AccessBehavior']->protect = array_merge(\Yii::$app->behaviors['AccessBehavior']->protect, []);
 
             \Yii::$app->urlManager->addRules([
                 'admin' => 'admin/admin/index'
@@ -61,18 +72,40 @@ class AppBehavior extends Behavior
         //установка языка
         \Yii::$app->language = 'ru-RU';
 
-        //добавление правил роутинга
-        \Yii::$app->urlManager->addRules(['test' => 'site/index']);
-
-        //регистрация модуля
-        \Yii::$app->setModule('new', [
-            'class' => 'yii\gii\Module'
-        ]);
-
         //регистрация компонента
         \Yii::$app->set('cache', [
             'class' => 'yii\caching\FileCache'
         ]);
         */
+    }
+
+    public function init_plugins()
+    {
+        //init core admin plugin
+        $plugin = new AdminPlugin();
+        $plugin->init();
+
+        //list all plugins and run init() for all of them
+
+        $plugin = new Plugin();
+        $plugin->init();
+
+    }
+
+    private function setModules()
+    {
+        \Yii::$app->setModule('admin', [
+            'class' => 'developeruz\yii_kit_core\Module',
+        ]);
+        \Yii::$app->behaviors['AccessBehavior']->protect = array_merge(\Yii::$app->behaviors['AccessBehavior']->protect,
+            ['permit']);
+
+        \Yii::$app->setModule('permit', [
+            'class' => 'developeruz\db_rbac\Yii2DbRbac',
+            'layout' => '@vendor/developeruz/yii-kit-core/views/layouts/main',
+            'params' => [
+                'userClass' => 'developeruz\easyii_rbac\models\User'
+            ]
+        ]);
     }
 }
