@@ -5,7 +5,6 @@ use yii\web\View;
 
 class Plugin
 {
-
     public function addNotificationMenuItem($menuItemClass, $linkContent, $dropDownMenu)
     {
         $html = '<li class="dropdown ' . $menuItemClass . '">
@@ -29,7 +28,22 @@ class Plugin
         \Yii::$app->view->on(View::EVENT_BEGIN_BODY, function ($event) {
             $params = \Yii::$app->getView()->params['_yiikit_left_menu'];
             $params[] = $event->data['data'];
-            \Yii::$app->getView()->params['_yiikit_left_menu'] = array_reverse($params);
+            \Yii::$app->getView()->params['_yiikit_left_menu'] = $params;
         }, ['data' => $arr]);
+    }
+
+    public static function install()
+    {
+        return \Yii::t('app', 'No additional install information was provided by plugin developers');
+    }
+
+    public static function uninstall()
+    {
+        return \Yii::t('app', 'No additional uninstall information was provided by plugin developers');
+    }
+
+    public static function info()
+    {
+        return '-';
     }
 }

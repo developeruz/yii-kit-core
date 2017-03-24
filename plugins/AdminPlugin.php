@@ -13,12 +13,12 @@ class AdminPlugin extends Plugin
                 '<span class="hidden-xs">' . \Yii::$app->user->identity->getUserName() . '</span>', $userMenu);
 
             $this->addLeftMenuItem(['label' => 'Settings', 'icon' => 'fa fa-cog', 'url' => ['/admin/settings']]);
+            $this->addLeftMenuItem(['label' => 'Plugins', 'icon' => 'fa fa-cubes', 'url' => ['/admin/plugins']]);
             $this->addLeftMenuItem([
-                'label' => 'Users',
-                'icon' => 'fa fa-users',
+                'label' => 'Permissions',
+                'icon' => 'fa fa-user-secret',
                 'url' => '#',
                 'items' => [
-                    ['label' => 'Users', 'icon' => 'fa fa-users', 'url' => ['/user/admin/index'],],
                     ['label' => 'Roles', 'icon' => 'fa fa-user-secret', 'url' => ['/permit/access/role'],],
                     ['label' => 'Permissions', 'icon' => 'fa fa-unlock-alt', 'url' => ['/permit/access/permission'],],
                 ]

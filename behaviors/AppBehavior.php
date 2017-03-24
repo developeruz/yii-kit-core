@@ -2,6 +2,7 @@
 namespace developeruz\yii_kit_core\behaviors;
 
 use app\components\Plugin;
+use app\plugins\users\UsersPlugin;
 use developeruz\yii_kit_core\assets\YiiKitAsset;
 use developeruz\yii_kit_core\plugins\AdminPlugin;
 use developeruz\yii_kit_core\services\ConfigService;
@@ -81,14 +82,19 @@ class AppBehavior extends Behavior
 
     public function init_plugins()
     {
-        //init core admin plugin
-        $plugin = new AdminPlugin();
-        $plugin->init();
-
         //list all plugins and run init() for all of them
 
         $plugin = new Plugin();
         $plugin->init();
+
+        $plugin = new UsersPlugin();
+        $plugin->init();
+
+        //init core admin plugin
+        $plugin = new AdminPlugin();
+        $plugin->init();
+
+
 
     }
 
@@ -104,8 +110,12 @@ class AppBehavior extends Behavior
             'class' => 'developeruz\db_rbac\Yii2DbRbac',
             'layout' => '@vendor/developeruz/yii-kit-core/views/layouts/main',
             'params' => [
-                'userClass' => 'developeruz\easyii_rbac\models\User'
+                'userClass' => 'app\models\User'
             ]
+        ]);
+
+        \Yii::$app->setModule('comment', [
+            'class' => 'yii2mod\comments\Module'
         ]);
     }
 }
